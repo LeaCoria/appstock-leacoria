@@ -4,6 +4,9 @@ Esta aplicación es un simulador de stock, donde el usuario puede registrarse y 
 La aplicación está desplegada en este [enlace](https://appstock-leacoria.herokuapp.com/).
 
 
+Todos los commits de seguimiento de la aplicación están ocultos.
+
+
 **Este proyecto está creado con Flask**.
 
 ***
