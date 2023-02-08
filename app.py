@@ -9,7 +9,7 @@ from flask_login import (LoginManager, login_user, logout_user,
 from config import config, _get_db_connection
 
 # Models:
-from models.ModelUser import ModelUser
+from models.ModelUser import ModelUser, Error
 from models.ModelNewUser import (ModelNewUser,
                                  EmailAlreadyExist,
                                  UserAlreadyExist)
@@ -83,16 +83,20 @@ def login():
             username=request.form['username'],
             password=request.form['password']
         )
-        logged_user = ModelUser.login(db, user)
-        if logged_user is not None:
-            if logged_user.password:
-                login_user(logged_user)
-                return redirect(url_for('home'))
+        try:
+            logged_user = ModelUser.login(db, user)
+            if logged_user is not None:
+                if logged_user.password:
+                    login_user(logged_user)
+                    return redirect(url_for('home'))
+                else:
+                    flash("Password invalid")
+                    return render_template('auth/login.html')
             else:
-                flash("Password invalid")
+                flash("User not found...")
                 return render_template('auth/login.html')
-        else:
-            flash("User not found...")
+        except Error:
+            flash("Ups, try again...")
             return render_template('auth/login.html')
     else:
         try:

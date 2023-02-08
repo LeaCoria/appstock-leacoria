@@ -1,4 +1,9 @@
 from .entities.User import User
+from psycopg2.errors import InFailedSqlTransaction
+
+
+class Error(Exception):
+    pass
 
 
 class ModelUser():
@@ -10,6 +15,7 @@ class ModelUser():
             sql = "SELECT * FROM users WHERE username = %s"
             cursor.execute(sql, (user.username,))
             row = cursor.fetchone()
+            cursor.execute("ROLLBACK")
             if row is not None:
                 user = User(row[0],
                             row[3],
@@ -17,8 +23,11 @@ class ModelUser():
                 return user
             else:
                 return None
-        except Exception as ex:
-            raise ex
+        except InFailedSqlTransaction:
+            cursor = db.cursor()
+            cursor.execute("ROLLBACK")
+            cursor.close()
+            raise Error
 
     @classmethod
     def get_by_id(self, db, id):
