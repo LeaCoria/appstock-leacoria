@@ -1,0 +1,43 @@
+{% extends './layout.html'%}
+
+{% block title %} Profile {% endblock %}
+
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="/home">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('profile') }}">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('items') }}">Items</a>
+    </li>
+    {% if current_user.admin %}
+        <li class="nav-item">
+            <a class="nav-link text-white" aria-current="page" href="{{ url_for("users") }}">Users</a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link text-white" aria-current="page" href="{{ url_for("make_me_admin") }}">Make me an admin</a>
+        </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for("logout") }}">LogOut</a>
+    </li>
+{% endblock %}
+
+{% block body %}
+    <div class="card text-center mb-3 d-flex justify-content-center" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{ current_user.fullname }}</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">email: {{ current_user.email }}</li>
+                <li class="list-group-item">Username: {{ current_user.username }}</li>
+                <li class="list-group-item">Name: {{ current_user.name }}</li>
+                <li class="list-group-item">Last name: {{ current_user.lastname }}</li>
+                {% if current_user.admin %}
+                    <li class="list-group-item">Admin: Sí</li>
+                {% endif %}
+        </div>
+    </div>
+{% endblock %}

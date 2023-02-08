@@ -1,0 +1,31 @@
+{% extends './layout.html'%}
+
+{% block title %} Home {% endblock %}
+
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="/home">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('profile') }}">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('items') }}">Items</a>
+    </li>
+    {% if current_user.admin %}
+        <li class="nav-item">
+            <a class="nav-link text-white" aria-current="page" href="{{ url_for("users") }}">Users</a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link text-white" aria-current="page" href="{{ url_for("make_me_admin") }}">Make me an admin</a>
+        </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for("logout") }}">LogOut</a>
+    </li>
+{% endblock %}
+
+{% block body %}
+    <h1>Bienvenido {{ current_user.fullname }}!</h1>
+{% endblock %}

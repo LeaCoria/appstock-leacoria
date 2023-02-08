@@ -1,0 +1,88 @@
+{% extends './layout.html'%}
+
+{% block title %} Items {% endblock %}
+
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="/home">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('profile') }}">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('items') }}">Items</a>
+    </li>
+    {% if current_user.admin %}
+        <li class="nav-item">
+            <a class="nav-link text-white" aria-current="page" href="{{ url_for("users") }}">Users</a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link text-white" aria-current="page" href="{{ url_for("make_me_admin") }}">Make me an admin</a>
+        </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for("logout") }}">LogOut</a>
+    </li>
+{% endblock %}
+
+{% block customCSS %}
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/items.css") }}">
+{% endblock %}
+
+{% block body %}
+    <h1>All our items</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            </br>
+            {% for messages in messages %}
+                <div class="alert alert-primary alert dissmissible mb-3 message_flash" role="alert" style="width: 50%; margin: auto">
+                    <strong>{{ messages }}</strong>
+                    <button type="button" class="btn-close" data-bds-dismiss="alert" aria-label="Close"></button> 
+                </div>                    
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% if current_user.admin %}
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <a class="btn btn-primary btn-lg" href="{{ url_for("register_new_item") }}">Register new item</a>
+        <a class="btn btn-success btn-lg" href="{{ url_for("add_items") }}">Add items</a>
+    </div>
+    {% else %}
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <a class="btn btn-primary btn-lg not_register">Register new item</a>
+        <a class="btn btn-success btn-lg not_add">Add items</a>
+    </div>
+    {% endif %}
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
+        {% for item in all_items %}
+            {% if item[3] > 0 %}
+                <div class="col">   
+                    <div class="card h-100 text-start animated fadeIn fast">
+                        <img src="" class="card-img-top" alt="">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item[1] }}</h5>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><b>Brand:</b> {{ item[2] }}</li>
+                            <li class="list-group-item"><b>Quantity available:</b> {{ item[3] }}</li>
+                            <li class="list-group-item">
+                                <form action="/purchase_item" method="POST">
+                                    <div class="d-flex justify-content-start">
+                                        <input type="hidden" class="form-control" id="cod" name="cod" value="{{ item[0] }}">
+                                        <input type="hidden" class="form-control" id="name" name="name" value="{{ item[1] }}">
+                                        <input type="hidden" class="form-control" id="brand" name="brand" value="{{ item[2] }}">
+                                        <input type="hidden" class="form-control" id="current_cuantity" name="current_cuantity" value="{{ item[3] }}">
+                                        <button class="w-100 btn btn-md btn-primary ms-2" type="submit">Purchase item</button>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <script src="{{ url_for('static', filename='js/btn_close.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/items.js') }}"></script>
+{% endblock %}

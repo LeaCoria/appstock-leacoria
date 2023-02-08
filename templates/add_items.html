@@ -1,0 +1,90 @@
+{% extends './layout.html'%}
+
+{% block title %} Add Items {% endblock %}
+
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="/home">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('profile') }}">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('items') }}">Items</a>
+    </li>
+    {% if current_user.admin %}
+        <li class="nav-item">
+            <a class="nav-link text-white" aria-current="page" href="{{ url_for("users") }}">Users</a>
+        </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for("logout") }}">LogOut</a>
+    </li>
+{% endblock %}
+
+{% block customCSS %}
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/add_items.css") }}">
+{% endblock %}
+
+{% block body %}
+    <h1>Add items</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            </br>
+            {% for messages in messages %}
+                <div class="alert alert-primary alert dissmissible mb-3 message_flash" role="alert" style="width: 50%; margin: auto">
+                    <strong>{{ messages }}</strong>
+                    <button type="button" class="btn-close" data-bds-dismiss="alert" aria-label="Close"></button> 
+                </div>                    
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="d-flex justify-content-start">
+        <form class="row g-3 me-3" action="/add_items" method="POST" style="width: 50%">
+            <div>
+                <input type="text" class="form-control" id="cod" name="cod" placeholder="Code(*)">
+                <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Add item</button>
+            </div>
+        </form>
+        {% if show_item %}
+            <div class="container card text-start animated fadeIn fast">
+                <img src="" class="card-img-top" alt="">
+                <div class="card-body">
+                    <h3 class="card-title"><b>{{ item.name }}</b></h3>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>Code:</b> {{ item.cod }}</li>
+                    <li class="list-group-item"><b>Brand:</b> {{ item.brand }}</li>
+                    <li class="list-group-item"><b>Quantity:</b> {{ item.quantity }}</li>
+                    <li class="list-group-item">
+                        <form action="/add_quantity" method="POST">
+                            <div class="d-flex justify-content-start">
+                                <input type="text" class="form-control me-2" id="quantity_to_add" name="quantity_to_add" placeholder="Quantity(*)">
+                                <input type="hidden" class="form-control" id="current_cuantity" name="current_cuantity" value="{{ item.quantity }}">
+                                <input type="hidden" class="form-control" id="cod" name="cod" value="{{ item.cod }}">
+                                <button class="w-100 btn btn-md btn-primary ms-2" type="submit">Add item</button>
+                            </div>
+                            {% if show_errors %}
+                                {% for error in form.quantity_to_add.errors %}
+                                    <div class="d-flex justify-content-start">    
+                                        <div class="icon quote text-center" style="color: red">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                        </div>
+                                        <div class="container" style="text-align: left; margin: 0px; color: red">
+                                            {{ error }}
+                                        </div>
+                                    </div>    
+                                {% endfor %}
+                            {% endif %}
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        {% else %}
+            <div class="container card text-start" style="border: none">
+            </div>
+        {% endif %}
+    </div>
+    <script src="{{ url_for('static', filename='js/btn_close.js') }}"></script>
+{% endblock %}

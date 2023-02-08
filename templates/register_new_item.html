@@ -1,0 +1,96 @@
+{% extends './layout.html'%}
+
+{% block title %} Add New Items {% endblock %}
+
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="/home">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('profile') }}">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('items') }}">Items</a>
+    </li>
+    {% if current_user.admin %}
+        <li class="nav-item">
+            <a class="nav-link text-white" aria-current="page" href="{{ url_for("users") }}">Users</a>
+        </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for("logout") }}">LogOut</a>
+    </li>
+{% endblock %}
+
+{% block body %}
+    <h1>Register new item</h1>
+    <div class="container mt-6 p-md-3 form-signup">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                </br>
+                {% for messages in messages %}
+                    <div class="alert alert-primary alert dissmissible" role="alert">
+                        <strong>{{ messages }}</strong>
+                        <button type="button" class="btn-close" data-bds-dismiss="alert" aria-label="Close"></button> 
+                    </div>                    
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form class="row g-3" action="/register_new_item" method="POST">
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="cod" name="cod" placeholder="Code(*)">
+                {% for error in form.cod.errors %}
+                    <div class="d-flex justify-content-start">    
+                        <div class="icon quote text-center" style="color: red">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="container" style="text-align: left; margin: 0px; color: red">
+                            {{ error }}
+                        </div>
+                    </div>    
+                {% endfor %}
+            </div>
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name of the product(*)">
+                {% for error in form.name.errors %}
+                    <div class="d-flex justify-content-start">    
+                        <div class="icon quote text-center" style="color: red">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="container" style="text-align: left; margin: 0px; color: red">
+                            {{ error }}
+                        </div>
+                    </div>    
+                {% endfor %}
+            </div>
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="brand" name="brand" placeholder="Brand(*)">
+                {% for error in form.brand.errors %}
+                    <div class="d-flex justify-content-start">    
+                        <div class="icon quote text-center" style="color: red">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="container" style="text-align: left; margin: 0px; color: red">
+                            {{ error }}
+                        </div>
+                    </div>    
+                {% endfor %}
+            </div>
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Quantity(*)">
+                {% for error in form.quantity.errors %}
+                    <div class="d-flex justify-content-start">    
+                        <div class="icon quote text-center" style="color: red">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="container" style="text-align: left; margin: 0px; color: red">
+                            {{ error }}
+                        </div>
+                    </div>    
+                {% endfor %}
+            </div>
+            <small>All fields (*) are obligatory</small>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Add item</button>
+        </form>
+    </div>
+{% endblock %}

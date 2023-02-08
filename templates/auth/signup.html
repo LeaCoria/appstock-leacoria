@@ -1,0 +1,104 @@
+{% extends './layout.html' %}
+
+{% block title %}SignUp{% endblock %}
+
+{% block customCSS %}
+<link rel="stylesheet" href="{{ url_for('static', filename="css/signup.css") }}">
+<script src="{{ url_for('static', filename='js/signup.js') }}"></script>
+{% endblock %}
+
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link text-white" href="{{ url_for('login') }}">Login</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" href="{{ url_for('signup') }}">Sign Up!</a>
+    </li>
+{% endblock %}
+
+{% block body %}
+<h1 class="h3 mb-3 mt-3 fw-normal">Please Sign Up</h1>
+<div class="container mt-6 p-md-3 form-signup">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            </br>
+            {% for messages in messages %}
+                <div class="alert alert-primary alert dissmissible message_flash" role="alert">
+                    <strong>{{ messages }}</strong>
+                    <button type="button" class="btn-close" data-bds-dismiss="alert" aria-label="Close"></button> 
+                </div>                    
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form class="row g-3" action="/signup" method="POST">
+        <div class="col-md-6">
+            <input type="text" class="form-control" id="email" name="email" placeholder="E-mail(*)">
+            {% for error in form.email.errors %}
+                <div class="d-flex justify-content-start">    
+                    <div class="icon quote text-center" style="color: red">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div class="container" style="text-align: left; margin: 0px; color: red">
+                        {{ error }}
+                    </div>
+                </div>    
+            {% endfor %}
+        </div>
+        <div class="col-md-6">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password(*)">
+            {% for error in form.password.errors %}
+                <div class="d-flex justify-content-start">    
+                    <div class="icon quote text-center" style="color: red">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div class="container" style="text-align: left; margin: 0px; color: red">
+                        {{ error }}
+                    </div>
+                </div>    
+            {% endfor %}
+        </div>
+        <div class="col-12">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username(*)">
+            {% for error in form.username.errors %}
+                <div class="d-flex justify-content-start">    
+                    <div class="icon quote text-center" style="color: red">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div class="container" style="text-align: left; margin: 0px; color: red">
+                        {{ error }}
+                    </div>
+                </div>    
+            {% endfor %}
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Name(*)">
+            {% for error in form.name.errors %}
+                <div class="d-flex justify-content-start">    
+                    <div class="icon quote text-center" style="color: red">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div class="container" style="text-align: left; margin: 0px; color: red">
+                        {{ error }}
+                    </div>
+                </div>    
+            {% endfor %}
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name(*)">
+            {% for error in form.lastname.errors %}
+                <div class="d-flex justify-content-start">    
+                    <div class="icon quote text-center" style="color: red">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div class="container" style="text-align: left; margin: 0px; color: red">
+                        {{ error }}
+                    </div>
+                </div>    
+            {% endfor %}
+        </div>
+        <small>All fields (*) are obligatory</small>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Sign Up</button>
+    </form>
+</div>
+<script src="{{ url_for('static', filename='js/btn_close.js') }}"></script>
+{% endblock %}

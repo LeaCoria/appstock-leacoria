@@ -1,0 +1,37 @@
+{% extends './layout.html'%}
+
+{% block title %} Users {% endblock %}
+
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="/home">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('profile') }}">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('items') }}">Items</a>
+    </li>
+    {% if current_user.admin %}
+        <li class="nav-item">
+            <a class="nav-link text-white" aria-current="page" href="{{ url_for("users") }}">Users</a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link text-white" aria-current="page" href="{{ url_for("make_me_admin") }}">Make me an admin</a>
+        </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for("logout") }}">LogOut</a>
+    </li>
+{% endblock %}
+
+{% block body %}
+    <main class="form-signin w-100 m-auto">
+        <form action="/make_me_admin" method="POST"  onsubmit="alert ('Now you are an admin');">
+            <h1 class="h3 mb-3 fw-normal">Make yourself an admin</h1>
+            <input type="hidden" class="form-control" id="usernmae" name="username" value="{{ current_user.username }}">
+            <button class="w-100 btn btn-lg btn-primary make_admin" type="submit">Send request</button>
+        </form>
+    </main>
+{% endblock%}

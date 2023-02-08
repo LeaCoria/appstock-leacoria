@@ -1,0 +1,62 @@
+{% extends './layout.html'%}
+
+{% block title %} Purchase Item {% endblock %}
+
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="/home">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('profile') }}">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('items') }}">Items</a>
+    </li>
+    {% if current_user.admin %}
+        <li class="nav-item">
+            <a class="nav-link text-white" aria-current="page" href="{{ url_for("users") }}">Users</a>
+        </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for("logout") }}">LogOut</a>
+    </li>
+{% endblock %}
+
+{% block body %}
+    <h1>Purchase item</h1>
+    <div class="container card text-start animated fadeIn fast">
+        <img src="" class="card-img-top" alt="">
+        <div class="card-body">
+            <h3 class="card-title"><b>{{ item.name }}</b></h3>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><b>Brand:</b> {{ item.brand }}</li>
+            <li class="list-group-item"><b>Quantity:</b> {{ item.quantity }}</li>
+            <li class="list-group-item">
+                <form action="/substract_quantity" method="POST">
+                    <div class="d-flex justify-content-start">
+                        <input type="hidden" class="form-control" id="cod" name="cod" value="{{ item.cod }}">
+                        <input type="hidden" class="form-control" id="name" name="name" value="{{ item.name }}">
+                        <input type="hidden" class="form-control" id="brand" name="brand" value="{{ item.brand }}">
+                        <input type="hidden" class="form-control" id="current_cuantity" name="current_cuantity" value="{{ item.quantity }}">
+                        <input type="text" class="form-control me-2" id="quantity_to_substract" name="quantity_to_substract" placeholder="Quantity(*)">
+                        <button class="w-100 btn btn-md btn-primary ms-2" type="submit">Purchase item</button>
+                    </div>
+                    {% if show_errors %}
+                        {% for error in form.quantity_to_substract.errors %}
+                            <div class="d-flex justify-content-start">    
+                                <div class="icon quote text-center" style="color: red">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                </div>
+                                <div class="container" style="text-align: left; margin: 0px; color: red">
+                                    {{ error }}
+                                </div>
+                            </div>    
+                        {% endfor %}
+                    {% endif %}
+                </form>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends './layout.html'%}
+
+{% block title %} Users {% endblock %}
+
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="/home">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('profile') }}">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for('items') }}">Items</a>
+    </li>
+    {% if current_user.admin %}
+        <li class="nav-item">
+            <a class="nav-link text-white" aria-current="page" href="{{ url_for("users") }}">Users</a>
+        </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link text-white" aria-current="page" href="{{ url_for("logout") }}">LogOut</a>
+    </li>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col">
+            <h1 class="text-center">All users registered</h1>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Lastname</th>
+                            <th>Admin</th>
+                            <th>Make admin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in all_users %}
+                        <tr>
+                            <td>{{ user[1] }}</td>
+                            <td>{{ user[2] }}</td>
+                            <td>{{ user[3] }}</td>
+                            {% if user[4] == 1 %}
+                                <td>Yes</td>
+                                <td>
+                                    <form action="/unmake_admin" method="POST" onsubmit="return confirm('Are you sure you want kick {{ user[1] }} from admins?');">
+                                        <input type="hidden" class="form-control" id="usernmae" name="username" value="{{ user[1] }}">
+                                        {% if user[1] == 'admin' %}
+                                        <button class="btn btn-danger btn-sm disabled" type="submit">Unmake admin</button>
+                                        {% else %}
+                                            <button class="btn btn-danger btn-sm" type="submit">Unmake admin</button>
+                                        {% endif %}
+                                    </form>
+                                </td>
+                            {% else %}
+                                <td>No</td>
+                                <td>
+                                    <form action="/make_admin" method="POST">
+                                        <input type="hidden" class="form-control" id="usernmae" name="username" value="{{ user[1] }}">
+                                        <button class="btn btn-primary btn-sm" type="submit">Make admin</button>
+                                    </form>
+                                </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
